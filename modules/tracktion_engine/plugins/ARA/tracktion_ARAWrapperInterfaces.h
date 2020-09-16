@@ -215,14 +215,14 @@ static ARADocument* createDocumentInternal (Edit& edit)
 
     if (auto factory = MelodyneInstanceFactory::getInstance (edit.engine).factory)
     {
-        static const SizedStruct<ARA_MEMBER_PTR_ARGS (ARAAudioAccessControllerInterface, destroyAudioReader)> audioAccess =
+        static const SizedStruct<ARA_STRUCT_MEMBER (ARAAudioAccessControllerInterface, destroyAudioReader)> audioAccess =
         {
             &AudioSourceWrapper::createAudioReaderForSource,
             &AudioSourceWrapper::readAudioSamples,
             &AudioSourceWrapper::destroyAudioReader
         };
 
-        static const SizedStruct<ARA_MEMBER_PTR_ARGS (ARAArchivingControllerInterface, notifyDocumentUnarchivingProgress)> hostArchiving =
+        static const SizedStruct<ARA_STRUCT_MEMBER (ARAArchivingControllerInterface, notifyDocumentUnarchivingProgress)> hostArchiving =
         {
             &ArchivingFunctions::getArchiveSize,
             &ArchivingFunctions::readBytesFromArchive,
@@ -231,7 +231,7 @@ static ARADocument* createDocumentInternal (Edit& edit)
             &ArchivingFunctions::notifyDocumentUnarchivingProgress
         };
 
-        static const SizedStruct<ARA_MEMBER_PTR_ARGS (ARAContentAccessControllerInterface, destroyContentReader)>  content =
+        static const SizedStruct<ARA_STRUCT_MEMBER (ARAContentAccessControllerInterface, destroyContentReader)>  content =
         {
             &MusicalContextWrapper::isMusicalContextContentAvailable,
             &MusicalContextWrapper::getMusicalContextContentGrade,
@@ -244,14 +244,14 @@ static ARADocument* createDocumentInternal (Edit& edit)
             &MusicalContextWrapper::destroyContentReader
         };
 
-        static const SizedStruct<ARA_MEMBER_PTR_ARGS (ARAModelUpdateControllerInterface, notifyAudioModificationContentChanged)>  modelUpdating =
+        static const SizedStruct<ARA_STRUCT_MEMBER (ARAModelUpdateControllerInterface, notifyAudioModificationContentChanged)>  modelUpdating =
         {
             &ModelUpdateFunctions::notifyAudioSourceAnalysisProgress,
             &ModelUpdateFunctions::notifyAudioSourceContentChanged,
             &ModelUpdateFunctions::notifyAudioModificationContentChanged
         };
 
-        static const SizedStruct<ARA_MEMBER_PTR_ARGS (ARAPlaybackControllerInterface, requestEnableCycle)>  playback =
+        static const SizedStruct<ARA_STRUCT_MEMBER (ARAPlaybackControllerInterface, requestEnableCycle)>  playback =
         {
             &EditProxyFunctions::requestStartPlayback,
             &EditProxyFunctions::requestStopPlayback,
@@ -261,7 +261,7 @@ static ARADocument* createDocumentInternal (Edit& edit)
         };
 
         //NB: Can't be a stack object since it doesn't get copied when passed into the document instance!
-        std::unique_ptr<ARADocumentControllerHostInstance> hostInstance (new SizedStruct<ARA_MEMBER_PTR_ARGS (ARADocumentControllerHostInstance, playbackControllerInterface)> ());
+        std::unique_ptr<ARADocumentControllerHostInstance> hostInstance (new SizedStruct<ARA_STRUCT_MEMBER (ARADocumentControllerHostInstance, playbackControllerInterface)> ());
         hostInstance->audioAccessControllerHostRef      = nullptr;
         hostInstance->audioAccessControllerInterface    = &audioAccess;
         hostInstance->archivingControllerHostRef        = nullptr;
@@ -278,7 +278,7 @@ static ARADocument* createDocumentInternal (Edit& edit)
         if (name.isEmpty()) name = edit.getName().trim();
         if (name.isEmpty()) name = getEditFileFromProjectManager (edit).getFullPathName().trim();
 
-        const SizedStruct<ARA_MEMBER_PTR_ARGS (ARADocumentProperties, name)> documentProperties =
+        const SizedStruct<ARA_STRUCT_MEMBER (ARADocumentProperties, name)> documentProperties =
         {
             name.toRawUTF8()
         };
@@ -343,7 +343,7 @@ public:
                                                        nullptr, kARAContentUpdateEverythingChanged);
     }
     
-    SizedStruct<ARA_MEMBER_PTR_ARGS (ARAMusicalContextProperties, color)> getMusicalContextProperties()
+    SizedStruct<ARA_STRUCT_MEMBER (ARAMusicalContextProperties, color)> getMusicalContextProperties()
     {
         return 
         { 
@@ -835,7 +835,7 @@ public:
         delete (NodeReader*) hostReaderRef;
     }
 
-    SizedStruct<ARA_MEMBER_PTR_ARGS (ARAAudioSourceProperties, merits64BitSamples)> getAudioSourceProperties()
+    SizedStruct<ARA_STRUCT_MEMBER (ARAAudioSourceProperties, merits64BitSamples)> getAudioSourceProperties()
     {
         std::unique_ptr<NodeReader> reader (createReader());
         return
@@ -896,7 +896,7 @@ public:
             doc.dci->destroyAudioModification (doc.dcRef, audioModificationRef);
     }
 
-    SizedStruct<ARA_MEMBER_PTR_ARGS (ARAAudioModificationProperties, persistentID)> getAudioModificationProperties()
+    SizedStruct<ARA_STRUCT_MEMBER (ARAAudioModificationProperties, persistentID)> getAudioModificationProperties()
     {
         return
         {
@@ -937,7 +937,7 @@ public:
             doc.dci->destroyRegionSequence (doc.dcRef, regionSequenceRef);
     }
 
-    SizedStruct<ARA_MEMBER_PTR_ARGS (ARARegionSequenceProperties, color)> getRegionSequenceProperties()
+    SizedStruct<ARA_STRUCT_MEMBER (ARARegionSequenceProperties, color)> getRegionSequenceProperties()
     {
         return
         {
@@ -1024,7 +1024,7 @@ public:
     ARAPlaybackRegionRef playbackRegionRef = nullptr;
 
     /** NB: This is where time-stretching is setup */
-    SizedStruct<ARA_MEMBER_PTR_ARGS (ARAPlaybackRegionProperties, color)> getPlaybackRegionProperties()
+    SizedStruct<ARA_STRUCT_MEMBER (ARAPlaybackRegionProperties, color)> getPlaybackRegionProperties()
     {
         auto regionSequenceRef = doc.regionSequences[clip.getTrack()]->regionSequenceRef;
         auto pos = clip.getPosition();
