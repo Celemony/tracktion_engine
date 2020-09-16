@@ -249,7 +249,7 @@ static std::unique_ptr<AudioPluginInstance> createMelodynePlugin (Engine& engine
 
     auto araDescs = engine.getPluginManager().getARACompatiblePlugDescriptions();
 
-    if (auto p = createMelodynePlugin (Engine::getInstance(), "VST3", araDescs))
+    if (auto p = createMelodynePlugin (engine, "VST3", araDescs))
         return p;
 
     return {};
